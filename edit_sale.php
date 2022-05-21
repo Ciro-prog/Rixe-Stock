@@ -58,10 +58,6 @@
       $p_id = $product['id'];
       $s_qty     = $db->escape((int)$_POST['quantity']);
       $extra_qty = $s_qty - $sale['qty'];     /* <-- note this !!! */
-      $b_price   = $product['buy_price'];
-      $s_price   = $db->escape($_POST['sale_price']);
-      $s_total   = $db->escape($_POST['total_sale']);
-      $s_profit  = $s_total - $s_qty * $b_price;
       if (isset( $_POST['destination'] ))
         $s_dest    = $db->escape($_POST['destination']);
       else
@@ -74,10 +70,6 @@
       $sql  = "UPDATE `sales` SET";
       $sql .= " `product_id`='${p_id}'";
       $sql .= ", `qty`='${s_qty}'";
-      $sql .= ", `buy_price`='${b_price}'";
-      $sql .= ", `sale_price`='${s_price}'";
-      $sql .= ", `total_sale`='${s_total}'";
-      $sql .= ", `profit`='${s_profit}'";
       $sql .= ", `destination`='${s_dest}'";
       $sql .= ", `date`='${s_date}'";
       $sql .= " WHERE `id`=$s_id";

@@ -29,7 +29,7 @@
       $query  = "INSERT INTO products (";
       $query .=" name,partNo,quantity,categorie_id,media_id,location,date";
       $query .=") VALUES (";
-      $query .=" '{$p_name}', '${partNo}', '{$p_cat}', '{$media_id}', '{$location}', '{$date}'";
+      $query .=" '{$p_name}', '{$partNo}', '{$p_qty}', '{$p_cat}', '{$media_id}', '{$location}', '{$date}'";
       $query .=")";
       //$query .=" ON DUPLICATE KEY UPDATE name='{$p_name}'";
       if($db->query($query)){
@@ -175,6 +175,8 @@
                 <div class="col-md-3"><!--separator--></div>
                 
               </div>
+            </div>
+          
             </div>
 
             <div class="form-group">

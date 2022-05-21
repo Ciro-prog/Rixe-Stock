@@ -1,5 +1,5 @@
 <?php
-  $page_title = 'Ventas mensuales';
+  $page_title = 'Salidas mensuales';
   require_once('include/load.php');
   // Checkin What level user has permission to view this page
   page_require_level(3);
@@ -47,7 +47,7 @@
     }
   }
   if (($sales = monthlySales($year, $month)) == NULL) {
-    /*$session->msg("w", sprintf("No se encontraron ventas para {$month}/{$year}"));*/
+    /*$session->msg("w", sprintf("No se encontraron Salidas para {$month}/{$year}"));*/
   }
 ?>
 

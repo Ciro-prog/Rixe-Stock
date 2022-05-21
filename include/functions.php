@@ -101,7 +101,7 @@ function redirect($url, $permanent = false)
 /*--------------------------------------------------------------*/
 /* Function for find out total saleing price, buying price and profit
 /*--------------------------------------------------------------*/
-function total_price($totals)
+/*function total_price($totals)
 {
    $sum = 0;
    $sub = 0;
@@ -111,7 +111,7 @@ function total_price($totals)
      $profit = $sum - $sub;
    }
    return array($sum,$profit);
-}
+}*/
 /*--------------------------------------------------------------*/
 /* Function for Readable date time
 /*--------------------------------------------------------------*/

@@ -8,7 +8,7 @@
   <li>
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-plus"></i>
-       <span>Ventas</span>
+       <span>Salidas</span>
       </a>
       <ul class="nav submenu">
          <li><a href="sales.php">Administrar</a> </li>
@@ -18,7 +18,7 @@
   <li>
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-stats"></i>
-       <span>Reporte de ventas</span>
+       <span>Reporte de salias</span>
       </a>
       <ul class="nav submenu">
         <li><a href="daily_sales.php">Diario</a></li>

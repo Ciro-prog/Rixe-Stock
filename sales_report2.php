@@ -1,5 +1,5 @@
 <?php
-  $page_title = 'Salidas semanales';
+  $page_title = 'Salias diarias';
   require_once('include/load.php');
   // Checkin What level user has permission to view this page
   page_require_level(3);
@@ -7,37 +7,41 @@
 
 <?php
 
-  /* take the current date */
+  /* default to the current date */
   $year  = date('Y');
   $month = date('m');
   $day   = date('d');
   
+  $date_start = '';
+  $date_end   = '';
   if (isset($_POST['btn_build_report'])) {
-    if (isset($_POST['date'])) {
-      $date = $_POST['date'];
-      if ($date = strptime($date,'%Y-%m-%d')) {
-        /* valid date */
+    if (isset($_POST['date-start']) && isset($_POST['date-end'])) {
+      $date_start = $_POST['date-start'];
+      $date_end   = $_POST['date-end'];
+      
+      /*if ($date = strptime($date,'%Y-%m-%d')) {
         if (isset($date['tm_year']) && isset($date['tm_mon']) && isset($date['tm_mday'])) { 
           $year  = sprintf('%04d', $date['tm_year'] + 1900);
           $month = sprintf('%02d', $date['tm_mon']  + 1);
           $day   = sprintf('%02d', $date['tm_mday']);
         }
-      }
+      }*/
     }
     else {
       /* continue normally */    
     }
   }
 
-  /* retrieve sales */
-  $sales = weeklySales($year, $month, $day);
+  if (($sales = salesByDateRange($date_start, $date_end)) == NULL) {
+    /*$session->msg("w", sprintf("No se encontraron salidas en el rango"));*/
+  }
 ?>
 
 <?php include_once('layouts/header.php'); ?>
 
 <div class="row">
   <div class="col-md-6">
-    <?php echo display_msg($session->msg()); ?>
+    <?php echo display_msg($msg); ?>
   </div>
 </div>
 <div class="row">
@@ -46,33 +50,28 @@
       <div class="panel-heading clearfix">
         <strong>
           <i class="glyphicon glyphicon-tasks"></i>
-          <?php
-            if (is_numeric($year) && is_numeric($month) && is_numeric($day))
-              $target = strtotime($year.'-'.$month.'-'.$day);
-            else
-              $target = time();
-
-            $day_of_week = date('w', $target);
-            $monday = date('d-m-Y', strtotime('-'.($day_of_week-1).' days', $target));
-            $sunday = date('d-m-Y', strtotime('+'.(7-$day_of_week).' days', $target));
-          ?>
-          <span>
-            Reporte de salidas de la semana del <?php echo $monday; ?> al <?php echo $sunday; ?>
-          </span>
+          <span>Reporte de salidas por rango de fecha</span>
         </strong>
       </div>
       <div class="panel-body">
         
-        <form method="post" action="weekly_sales.php" class="clearfix">
-          <div class="form-group d-block" style="">
-            <div class="form-row border-0">
-              <div class="col border-0 d-inline-block" style="">
-                <label for="date" class="control-label">Fecha</label>
-                  <input type="text" class="form-control rounded" name="date" id="date" data-date data-date-format="yyyy-mm-dd" placeholder="aaaa-mm-dd" value="<?php
-                  if ($year > 0 && $month > 0 && $day > 0) echo $year.'-'.$month.'-'.$day; else echo ''; ?>">
-              </div>
-              <div class="col border-0 d-inline-block" style="margin-left: 2em;">
-                <button type="submit" name="btn_build_report" id="btn_build_report" class="btn btn-primary rounded">Generar</button>
+        <form method="post" action="sales_report.php" class="clearfix">
+          <div class="form-group">
+            <div class="form-group d-block" style="">
+              <div class="form-row border-0">
+                <div class="col border-0 d-inline-block" style="">
+                  <label for="date-start" class="control-label">Desde</label>
+                  <input type="text" class="form-control rounded" name="date-start" id="date-start" data-date data-date-format="yyyy-mm-dd" value="<?php echo ($date_start ? $date_start : date('Y-m-').'01'); ?>" placeholder="aaaa-mm-dd" style="width: 10em">
+                </div>
+
+                <div class="col border-0 d-inline-block" style="margin-left: 2em;">
+                  <label for="date-end" class="control-label">Hasta</label>
+                  <input type="text" class="form-control rounded" name="date-end" id="date-end" data-date data-date-format="yyyy-mm-dd" value="<?php echo ($date_end ? $date_end : date('Y-m-d')); ?>" placeholder="aaaa-mm-dd" style="width: 10em">
+                </div>
+
+                <div class="col border-0 d-inline-block" style="margin-left: 2em;">
+                  <button type="submit" name="btn_build_report" id="btn_build_report" class="btn btn-primary rounded">Generar</button>
+                </div>
               </div>
             </div>
           </div>
@@ -86,16 +85,20 @@
               <th> Nombre del producto </th>
               <th> Cliente/destino </th>
               <th> Fecha </th>
+              <th>  <?php 
+              echo $date_end.'/'.$date_start; 
+            ?> </th>
               <th class="text-center" style="width: 10%;"> Cantidad </th>
-             
+              <th class="text-right" style="width: 10%;"> Total Venta </th>
+              <th class="text-right" style="width: 10%;"> Profit </th>
            </tr>
           </thead>
           <tbody>
-            <?php 
-              $total_qty = 0;
+          <?php 
+              $total_qty = 0; 
             ?>
             <?php foreach ($sales as $sale):?>
-              <tr>
+            <tr>
               <td class="text-center"><?php echo count_id(); ?></td>
               <td><?php echo remove_junk($sale['partNo']); ?></td>
               <td><?php echo remove_junk($sale['name']); ?></td>
@@ -123,7 +126,7 @@
 </div>
 
 <!-- This is the jQuery background for this page -->
-<script type="text/javascript" src="lib/js/daily_sales.js"></script>
+<script type="text/javascript" src="lib/js/sales_report.js"></script>
 
 <!-- DataTable (only for more than 10 items)-->
 <?php if (count_id() > 10): ?>

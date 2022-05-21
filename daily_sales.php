@@ -1,5 +1,5 @@
 <?php
-  $page_title = 'Ventas diarias';
+  $page_title = 'Salidas diarias';
   require_once('include/load.php');
   // Checkin What level user has permission to view this page
   page_require_level(3);
@@ -15,7 +15,7 @@
   if (isset($_POST['btn_build_report'])) {
     if (isset($_POST['date'])) {
       $date = $_POST['date'];
-      if ($date = strptime($date,'%Y-%m-%d')) {
+      if ($date = strtotime($date)) {
         /* valid date */
         if (isset($date['tm_year']) && isset($date['tm_mon']) && isset($date['tm_mday'])) { 
           $year  = sprintf('%04d', $date['tm_year'] + 1900);
@@ -30,7 +30,7 @@
   }
 
   if (($sales = dailySales($year, $month, $day)) == NULL) {
-    /*$session->msg("w", sprintf("No se encontraron ventas para {$day}/{$month}/{$year}"));*/
+    /*$session->msg("w", sprintf("No se encontraron Salidas para {$day}/{$month}/{$year}"));*/
   }
 ?>
 
@@ -76,15 +76,11 @@
               <th> Cliente/destino </th>
               <th> Fecha </th>
               <th class="text-center" style="width: 10%;"> Cantidad </th>
-              <th class="text-right" style="width: 10%;"> Total Ventas </th>
-              <th class="text-right" style="width: 10%;"> Profit </th>
            </tr>
           </thead>
           <tbody>
             <?php 
               $total_qty = 0; 
-              $total_sale = 0; 
-              $total_profit = 0; 
             ?>
             <?php foreach ($sales as $sale):?>
             <tr>
@@ -94,13 +90,9 @@
               <td><?php echo remove_junk($sale['destination']); ?></td>
               <td><?php echo remove_junk($sale['date']); ?></td>
               <td class="text-center"><?php echo (int)$sale['total_qty']; ?></td>
-              <td class="text-right"><?php echo number_format( $sale['total_sale'], 2 ); ?></td>
-              <td class="text-right"><?php echo number_format( $sale['total_profit'], 2 ); ?></td>
             </tr>
             <?php 
               $total_qty += (int)$sale['total_qty']; 
-              $total_sale += $sale['total_sale'];
-              $total_profit += $sale['total_profit'];
             ?>
             <?php endforeach;?>
             <tr>
@@ -110,8 +102,6 @@
               <td></td>
               <td></td>
               <td class="text-center"><strong><?php echo (int)$total_qty; ?></strong></td>
-              <td class="text-right"><strong><?php echo number_format($total_sale, 2); ?></strong></td>
-              <td class="text-right"><strong><?php echo number_format($total_profit, 2); ?></strong></td>
             </tr>
           </tbody>
         </table>

@@ -46,6 +46,9 @@
       <link rel="stylesheet" href="lib/css/main.css" />
       <!-- panels, cards, forms -->
       <link rel="stylesheet" href="lib/css/panel.css"/>
+      <!-- Scrips de ajax para consulta de Report Sale-->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 
     </head>
     <body>

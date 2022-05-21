@@ -267,7 +267,7 @@ function page_require_level($required_level)
 function join_product_table() 
 {
   global $db;
-  $sql  =" SELECT p.id,p.name,p.partNo,p.quantity,p.buy_price,p.sale_price,p.location,p.media_id,p.date,c.name";
+  $sql  =" SELECT p.id,p.name,p.partNo,p.quantity,p.location,p.media_id,p.date,c.name";
   $sql  .=" AS categorie,m.file_name AS image";
   $sql  .=" FROM products p";
   $sql  .=" LEFT JOIN categories c ON c.id = p.categorie_id";
@@ -410,7 +410,7 @@ function update_product_qty($p_id, $p_qty) {
 /*--------------------------------------------------------------*/
 function find_recent_product_added($limit){
  global $db;
- $sql   = " SELECT p.id,p.name,p.sale_price,p.media_id,c.name AS categorie,";
+ $sql   = " SELECT p.id,p.name,p.media_id,c.name AS categorie,";
  $sql  .= "m.file_name AS image FROM products p";
  $sql  .= " LEFT JOIN categories c ON c.id = p.categorie_id";
  $sql  .= " LEFT JOIN media m ON m.id = p.media_id";
@@ -434,7 +434,7 @@ function find_higest_saleing_product($limit){
 /*--------------------------------------------------------------*/
 function find_all_sales(){
  global $db;
- $sql  = "SELECT s.id,s.product_id,s.qty,s.sale_price,s.total_sale,s.destination,s.date,p.name";
+ $sql  = "SELECT s.id,s.product_id,s.qty,s.destination,s.date,p.name";
  $sql .= " FROM sales s";
  $sql .= " LEFT JOIN products p ON s.product_id = p.id";
  $sql .= " ORDER BY s.date DESC";
@@ -445,7 +445,7 @@ function find_all_sales(){
 /*--------------------------------------------------------------*/
 function find_recent_sale_added($limit){
   global $db;
-  $sql  = "SELECT s.id,s.qty,s.sale_price,s.date,p.name";
+  $sql  = "SELECT s.id,s.qty,s.date,p.name";
   $sql .= " FROM sales s";
   $sql .= " LEFT JOIN products p ON s.product_id = p.id";
   $sql .= " ORDER BY s.date DESC LIMIT ".$db->escape((int)$limit);
@@ -458,12 +458,10 @@ function find_sale_by_dates($start_date,$end_date){
   global $db;
   $start_date  = date("Y-m-d", strtotime($start_date));
   $end_date    = date("Y-m-d", strtotime($end_date));
-  $sql  = "SELECT s.date,p.name,s.destination,p.sale_price,p.buy_price,";
+  $sql  = "SELECT s.date,p.name,s.destination,";
   $sql .= "COUNT(s.product_id) AS total_records,";
   //$sql .= "SUM(s.qty) AS total_sales,";
   $sql .= "SUM(s.qty) AS total_qty,";
-  $sql .= "SUM(p.sale_price * s.qty) AS total_saleing_price,";
-  $sql .= "SUM(p.buy_price * s.qty) AS total_buying_price ";
   $sql .= "FROM sales s ";
   $sql .= "LEFT JOIN products p ON s.product_sid = p.id";
   $sql .= " WHERE s.date BETWEEN '{$start_date}' AND '{$end_date}'";
@@ -506,8 +504,6 @@ function dailySales($year, $month, $day){
   $sql  = "SELECT DATE_FORMAT(s.date, '%Y-%m-%d') AS date";
   $sql .= ",p.partNo,p.name,s.destination";
   $sql .= ",SUM(s.qty) AS total_qty";
-  $sql .= ",SUM(s.total_sale) AS total_sale";
-  $sql .= ",SUM(s.profit) AS total_profit";
   $sql .= " FROM sales s";
   $sql .= " LEFT JOIN products p ON s.product_id = p.id";
   $sql .= " WHERE DATE_FORMAT(s.date, '%Y-%m-%d') = '{$year}-{$month}-{$day}'";
@@ -539,14 +535,10 @@ function weeklySales($year, $month, $day){
   $sql  = "SELECT ";
   $sql .= "p.partNo,p.name";
   $sql .= ",SUM(s.qty) AS total_qty";
-  $sql .= ",SUM(s.total_sale) AS total_sale";
-  $sql .= ",SUM(s.profit) AS total_profit";
   $sql .= " FROM sales s";
   $sql .= " LEFT JOIN products p ON s.product_id = p.id";
   $sql .= " WHERE DATE_FORMAT(s.date, '%v') = DATE_FORMAT('{$year}-{$month}-{$day}','%v')";
   $sql .= " GROUP BY p.name,p.partNo";
-  $sql .= " ORDER BY total_sale DESC";
-
   return find_by_sql($sql);
 }
 
@@ -571,8 +563,6 @@ function monthlySales($year, $month) {
   $sql  = "SELECT ";
   $sql .= "p.partNo,p.name";
   $sql .= ",SUM(s.qty) AS total_qty";
-  $sql .= ",SUM(s.total_sale) AS total_sale";
-  $sql .= ",SUM(s.profit) AS total_profit";
   $sql .= " FROM sales s";
   $sql .= " LEFT JOIN products p ON s.product_id = p.id";
   $sql .= " WHERE DATE_FORMAT(s.date, '%Y-%m') = '{$year}-{$month}'";
@@ -599,8 +589,6 @@ function salesByDateRange($date_start, $date_end) {
   //$sql .= "p.partNo,p.name,s.destination";
   $sql .= "p.partNo,p.name";
   $sql .= ",SUM(s.qty) AS total_qty";
-  $sql .= ",SUM(s.total_sale) AS total_sale";
-  $sql .= ",SUM(s.profit) AS total_profit";
   $sql .= " FROM sales s";
   $sql .= " LEFT JOIN products p ON s.product_id = p.id";
   $sql .= " WHERE s.date BETWEEN '{$date_start}' AND '{$date_end}'";

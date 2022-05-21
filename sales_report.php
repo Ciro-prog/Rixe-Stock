@@ -1,137 +1,108 @@
 <?php
-  $page_title = 'Ventas diarias';
-  require_once('include/load.php');
-  // Checkin What level user has permission to view this page
-  page_require_level(3);
-?>
 
-<?php
 
-  /* default to the current date */
-  $year  = date('Y');
-  $month = date('m');
-  $day   = date('d');
+ 
+
+$fecha_inicio = $_POST['fecha_inicio'];
+$fecha_final  = $_POST['fecha_final'];
+
+
   
-  $date_start = '';
-  $date_end   = '';
-  if (isset($_POST['btn_build_report'])) {
-    if (isset($_POST['date-start']) && isset($_POST['date-end'])) {
-      $date_start = $_POST['date-start'];
-      $date_end   = $_POST['date-end'];
-      
-      /*if ($date = strptime($date,'%Y-%m-%d')) {
-        if (isset($date['tm_year']) && isset($date['tm_mon']) && isset($date['tm_mday'])) { 
-          $year  = sprintf('%04d', $date['tm_year'] + 1900);
-          $month = sprintf('%02d', $date['tm_mon']  + 1);
-          $day   = sprintf('%02d', $date['tm_mday']);
-        }
-      }*/
-    }
-    else {
-      /* continue normally */    
-    }
-  }
 
-  if (($sales = salesByDateRange($date_start, $date_end)) == NULL) {
-    /*$session->msg("w", sprintf("No se encontraron ventas en el rango"));*/
-  }
+$alumnosLista = $conexion->query("SELECT * FROM sales  WHERE date BETWEEN '{$fecha_inicio}' AND '{$fecha_final}'"); 
+
+
+echo '<table style="width:100%">
+  <thead class="bg-primary">
+    <th>Nombre</th>
+    <th>Grupo</th> 
+    <th>Carrera</th>
+    <th>Fecha Ingreso</th>
+  </th>
+  </thead>
+  <tbody>';
+
+while($alumno = $alumnosLista->fetch(PDO::FETCH_ASSOC))
+{
+	echo '<tr> 
+			<td>'.$alumno['nombre'].'</td>
+			<td>'.$alumno['grupo'].'</td>
+			<td>'.$alumno['carrera'].'</td>
+			<td>'.$alumno['fecha_ingreso'].'</td>
+		</tr>';
+
+}
+
+echo '</tbody> </table>'; 
+
 ?>
 
-<?php include_once('layouts/header.php'); ?>
+<html lang="es">
+	<head> 
+		<title>ITIC TUTORIALES</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<link rel="stylesheet" href="css/estilos.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	</head>
+	<body>
+		<header>
+			<div class="alert alert-info">
+			<h3>Filtro de Fechas AJAX</h3>
+			</div>
+		</header>
 
-<div class="row">
-  <div class="col-md-6">
-    <?php echo display_msg($msg); ?>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default">
-      <div class="panel-heading clearfix">
-        <strong>
-          <i class="glyphicon glyphicon-tasks"></i>
-          <span>Reporte de salidas por rango de fecha</span>
-        </strong>
-      </div>
-      <div class="panel-body">
-        
-        <form method="post" action="sales_report.php" class="clearfix">
-          <div class="form-group">
-            <div class="form-group d-block" style="">
-              <div class="form-row border-0">
-                <div class="col border-0 d-inline-block" style="">
-                  <label for="date-start" class="control-label">Desde</label>
-                  <input type="text" class="form-control rounded" name="date-start" id="date-start" data-date data-date-format="yyyy-mm-dd" value="<?php echo ($date_start ? $date_start : date('Y-m-').'01'); ?>" placeholder="aaaa-mm-dd" style="width: 10em">
-                </div>
-
-                <div class="col border-0 d-inline-block" style="margin-left: 2em;">
-                  <label for="date-end" class="control-label">Hasta</label>
-                  <input type="text" class="form-control rounded" name="date-end" id="date-end" data-date data-date-format="yyyy-mm-dd" value="<?php echo ($date_end ? $date_end : date('Y-m-d')); ?>" placeholder="aaaa-mm-dd" style="width: 10em">
-                </div>
-
-                <div class="col border-0 d-inline-block" style="margin-left: 2em;">
-                  <button type="submit" name="btn_build_report" id="btn_build_report" class="btn btn-primary rounded">Generar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-
-        <table class="table table-striped" id="tbl-sales">
-          <thead>
-            <tr>
-              <th class="text-center" style="width: 50px;"></th>
-              <th style="width: 10%;"> Part No. </th>
-              <th> Nombre del producto </th>
-              <th> Cliente/destino </th>
-              <th> Fecha </th>
-              <th class="text-center" style="width: 10%;"> Cantidad </th>
-              <th class="text-right" style="width: 10%;"> Total Venta </th>
-              <th class="text-right" style="width: 10%;"> Profit </th>
-           </tr>
-          </thead>
-          <tbody>
-            <?php 
-              $total_qty = 0; 
-              $total_sale = 0; 
-              $total_profit = 0; 
-            ?>
-            <?php foreach ($sales as $sale):?>
-            <tr>
-              <td class="text-center"><?php echo count_id(); ?></td>
-              <td><?php echo remove_junk($sale['partNo']); ?></td>
-              <td><?php echo remove_junk($sale['name']); ?></td>
-              <td><?php echo remove_junk($sale['destination']); ?></td>
-              <td><?php echo remove_junk($sale['date']); ?></td>
-              <td class="text-center"><?php echo (int)$sale['total_qty']; ?></td>
-              <td class="text-right"><?php echo number_format( $sale['total_sale'], 2 ); ?></td>
-              <td class="text-right"><?php echo number_format( $sale['total_profit'], 2 ); ?></td>
-            </tr>
-            <?php 
-              $total_qty += (int)$sale['total_qty']; 
-              $total_sale += $sale['total_sale'];
-              $total_profit += $sale['total_profit'];
-            ?>
-            <?php endforeach;?>
-            <tr>
-              <td class="text-center"><?php echo count_id(); ?></td>
-              <td><strong>Total</strong></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="text-center"><strong><?php echo (int)$total_qty; ?></strong></td>
-              <td class="text-right"><strong><?php echo number_format($total_sale, 2); ?></strong></td>
-              <td class="text-right"><strong><?php echo number_format($total_profit, 2); ?></strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<form class="form-inline"  method="post"  name="formFechas" id="formFechas">
+    <div class="col-xs-10 col-xs-offset-3">
+        <div class="form-group">
+            <label for="fecha_inicio">Fecha Inicio:</label>
+            <input type="date" class="form-control" name="fecha_inicio" required>
+        </div>
+        <div class="form-group">
+            <label for="fecha_final">Fecha Final:</label>
+            <input type="date" class="form-control" name="fecha_final" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
     </div>
-  </div>
-</div>
+</form>
 
-<!-- This is the jQuery background for this page -->
-<script type="text/javascript" src="lib/js/sales_report.js"></script>
+<br><br><br>
+
+<section id="tabla_resultado">
+<!-- AQUI SE DESPLEGARA NUESTRA TABLA DE CONSULTA -->
+</section>
+
+        
+</body>
+</html>
+
+
+<script type="text/javascript">
+ 
+    $('Formfechas').submit(function(e){
+
+        e.preventDefault();
+
+        var form = $($this);
+        var url = form.attr('action');
+
+        $.ajax(
+        {
+            type: "POST",
+            url: 'fechas.php',
+            data: form.serialize(),
+            success: function(data)
+            {
+                $('#tabla_resultado').html('');
+                $('#tabla_resultado').append(data); 
+            }
+        });
+    }); 
+
+</script>
 
 <!-- DataTable (only for more than 10 items)-->
 <?php if (count_id() > 10): ?>
@@ -140,7 +111,7 @@
     $('#tbl-sales').DataTable({
     })
   })
+  
 </script>
 <?php endif; ?>
-
 <?php include_once('layouts/footer.php'); ?>

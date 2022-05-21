@@ -1,5 +1,5 @@
 <?php
-  $page_title = 'Ver Ventas';
+  $page_title = 'Ver Salidas';
   require_once('include/load.php');
   // Checkin What level user has permission to view this page
    page_require_level(3);
@@ -20,7 +20,7 @@
       <div class="panel-heading clearfix">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span> Ventas </span>
+          <span> Salidas </span>
         </strong>
         <div class="pull-right">
           <a href="add_sale.php" class="btn btn-primary">Agregar</a>
@@ -33,8 +33,6 @@
               <th class="text-center" style="width: 50px;"></th>
               <th> Nombre del producto </th>
               <th class="text-center" style="width: 15%;"> Cantidad</th>
-              <th class="text-center" style="width: 15%;"> P. Unit.</th>
-              <th class="text-center" style="width: 15%;"> Total</th>
               <th class="text-center" style="width: 15%;"> Destino </th>
               <th class="text-center" style="width: 15%;"> Fecha </th>
               <th class="text-center" style="width: 100px;"> Acciones </th>
@@ -46,8 +44,6 @@
              <td class="text-center"><?php echo count_id();?></td>
              <td><?php echo remove_junk($sale['name']); ?></td>
              <td class="text-center"><?php echo (int)$sale['qty']; ?></td>
-             <td class="text-center"><?php echo $sale['sale_price']; ?></td>
-             <td class="text-center"><?php echo $sale['total_sale']; ?></td>
              <td class="text-center"><?php echo remove_junk($sale['destination']); ?></td>
              <td class="text-center"><?php echo $sale['date']; ?></td>
              <td class="text-center">

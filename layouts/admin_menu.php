@@ -67,7 +67,7 @@
   <li>
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-plus"></i>
-      <span>Ventas</span>
+      <span>Salidas</span>
     </a>
     <!--<ul class="nav menu">-->
     <ul class="nav submenu">
@@ -78,7 +78,7 @@
   <li>
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-stats"></i>
-      <span>Reportes de Ventas</span>
+      <span>Reportes de Salidas</span>
     </a>
     <!--<ul class="nav menu">-->
     <ul class="nav submenu">

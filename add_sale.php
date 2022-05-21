@@ -1,5 +1,5 @@
 <?php
-  $page_title = 'Procesar Venta';
+  $page_title = 'Procesar Salidas';
   require_once('include/load.php');
   // Checkin What level user has permission to view this page
   page_require_level(3);
@@ -15,7 +15,7 @@
       $session->msg("d", $errors);
       redirect(SITE_URL.'add_sale.php', false);
     }
-    $req_fields = array( 'quantity','sale_price','total_sale','date' );
+    $req_fields = array( 'quantity','date' );
     
     //if(empty($errors)){
     if( validate_fields($req_fields) ){
@@ -29,10 +29,6 @@
       }
       $p_id = $product['id'];
       $s_qty     = $db->escape((int)$_POST['quantity']);
-      $b_price   = $product['buy_price'];
-      $s_price   = $db->escape($_POST['sale_price']);
-      $s_total   = $db->escape($_POST['total_sale']);
-      $s_profit  = $s_total - $s_qty * $b_price;
       if (isset( $_POST['destination'] ))
         $s_dest    = $db->escape($_POST['destination']);
       else
@@ -41,9 +37,9 @@
       $s_date    = date( 'Y-m-d', strtotime( $date ) );
 
       $sql  = "INSERT INTO sales (";
-      $sql .= " product_id,qty,buy_price,sale_price,total_sale,profit,destination,date";
+      $sql .= " product_id,qty,destination,date";
       $sql .= ") VALUES (";
-      $sql .= "'${p_id}','${s_qty}','${b_price}','${s_price}','${s_total}','${s_profit}','${s_dest}','${s_date}'";
+      $sql .= "'${p_id}','${s_qty}','${s_dest}','${s_date}'";
       $sql .= ")";
 
       if( $db->query($sql) ){
@@ -81,7 +77,7 @@
       <div class="panel-heading clearfix">
         <strong>
           <i class="glyphicon glyphicon-plus"></i>
-          <span>Procesar Venta</span>
+          <span>Procesar Salidas</span>
         </strong>
       </div>
       <div class="panel-body">
@@ -161,31 +157,10 @@
               </div>
             </div>
           </div>
-
-          <div class="form-group">
-            <div class="row">
-              <!--<div class="col-md-3">
-                <label for="" class="control-label">Precio compra</label> 
-                <span class="form-control rounded" id="buy_price">0.00</span>
-              </div>-->
-              <div class="col-md-3">
-                <label for="" class="control-label">Precio venta</label> 
-                <input type="text" class="form-control rounded" id="sale_price" name="sale_price" placeholder="0.00">
-              </div>
-              <div class="col-md-3">
-                <!-- column separator -->
-              </div>
-              <div class="col-md-3">
-                <label for="" class="control-label">Total Venta</label>
-                <input type="text" class="form-control rounded" id="total_sale" name="total_sale" placeholder="0.00">
-              </div>
-            </div>
-          </div>
-
           <div class="form-group">
             <div class="row" style="margin-top: 2.5em;">
               <div class="col-md-12">
-                <button type="submit" name="add_sale" id="btn_add_sale" class="btn btn-primary pull-left">Procesar Venta</button>
+                <button type="submit" name="add_sale" id="btn_add_sale" class="btn btn-primary pull-left">Procesar Salidas</button>
                 <button class="btn btn-warning pull-left" id="refresh">Limpiar</button>
               </div>
             </div>
