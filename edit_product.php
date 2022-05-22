@@ -199,23 +199,23 @@ curl -d"id=1&product-name=Filtro de gasolina&partNo=FILT_AB0F01&category=1&locat
           <div class="form-group">
             <div class="row">
               <!-- Buy Price -->
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                 <label for="buy-price" class="control-label">Precio Compra</label>
                 <input type="text" class="form-control rounded text-right" name="buy-price" placeholder="0"
-                  value="<?php echo remove_junk($product['buy_price']); ?>">
-              </div>
+                  value="/*<?php echo remove_junk($product['buy_price']); ?>">
+              </div> -->
 
               <!--separator-->
               <div class="col-md-2"></div>
 
               <!-- Sale Price -->
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                 <label for="sale-price" class="control-label">Precio Venta</label>
                 <input type="text" class="form-control rounded text-right" name="sale-price" placeholder="0"
                  value="<?php echo remove_junk($product['sale_price']); ?>">
               </div>
 						</div>
-         	</div>
+         	</div> -->
            
 				  <div class="form-group">
           	<div class="row">

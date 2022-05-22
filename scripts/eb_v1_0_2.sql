@@ -1,8 +1,8 @@
--- MySQL dump 10.19  Distrib 10.3.29-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.4.24-MariaDB, for Win64 (AMD64)
 --
 -- Host: localhost    Database: eb_v1_0_2
 -- ------------------------------------------------------
--- Server version	10.3.29-MariaDB-0+deb10u1
+-- Server version	10.4.24-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,14 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `eb_v1_0_2`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `eb_v1_0_2` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `eb_v1_0_2`;
-
---
 -- Table structure for table `categories`
 --
 
@@ -35,7 +27,7 @@ CREATE TABLE `categories` (
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +36,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (5,'Clavos'),(1,'Repuestos'),(2,'Tornillos'),(3,'Tuercas');
+INSERT INTO `categories` VALUES (1,'Equipo'),(3,'Fuentes'),(2,'Herramientas');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +80,7 @@ CREATE TABLE `media` (
   `file_type` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +89,7 @@ CREATE TABLE `media` (
 
 LOCK TABLES `media` WRITE;
 /*!40000 ALTER TABLE `media` DISABLE KEYS */;
-INSERT INTO `media` VALUES (1,'filter.jpg','image/jpeg'),(3,'tuerca.png','image/png'),(4,'tornillo1.jpg','image/jpeg'),(5,'tornillo2.jpg','image/jpeg'),(6,'torx-1.jpeg','image/jpeg'),(7,'torx-2.jpeg','image/jpeg'),(8,'torx-3.jpeg','image/jpeg');
+INSERT INTO `media` VALUES (1,'francesa 12\'.jpg','image/jpeg'),(2,'ac gen 2.jpg','image/jpeg'),(3,'fuente.jpg','image/jpeg');
 /*!40000 ALTER TABLE `media` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,8 +105,6 @@ CREATE TABLE `products` (
   `name` varchar(255) NOT NULL,
   `partNo` varchar(60) NOT NULL,
   `quantity` int(11) DEFAULT NULL,
-  `buy_price` decimal(25,2) DEFAULT 0.00,
-  `sale_price` decimal(25,2) DEFAULT 0.00,
   `categorie_id` int(10) unsigned NOT NULL,
   `location` varchar(255) DEFAULT NULL,
   `media_id` int(10) unsigned DEFAULT 0,
@@ -125,7 +115,7 @@ CREATE TABLE `products` (
   KEY `media_id` (`media_id`),
   CONSTRAINT `FK_products` FOREIGN KEY (`categorie_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_products2` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +124,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'Filtro de gasolina','FILT_AB0F01',94,15.00,25.00,1,'X1',1,'2017-06-16 07:03:16'),(2,'Tornillo hexagonal 10mm x 50mm','TOR_HEX_001',23,2.00,3.40,2,'A1',4,'2019-03-01 07:03:16'),(3,'Tornillo hexagonal 8mm x 45mm','TOR_HEX_002',25,2.00,3.00,2,'A2',4,'2019-03-01 07:03:16'),(4,'Tornillo hexagonal 8mm x 50mm','TOR_HEX_003',94,2.00,3.00,2,'X2',4,'2019-03-01 07:03:16'),(5,'Tornillo Phillips1 70mm','TOR_PHI_170',83,2.50,5.10,2,'A1',5,'2019-03-02 07:05:23'),(6,'Tornillo Phillips1 80mm','TOR_PHI_180',90,2.50,4.50,2,'A2',5,'2019-03-02 07:05:34'),(7,'Tornillo Phillips1 90mm','TOR_PHI_190',89,2.50,4.50,2,'X2',5,'2019-03-02 07:06:02'),(8,'Tornillo Phillips2 70mm','TOR_PHI_270',85,2.50,4.50,2,'X4',5,'2019-03-02 07:06:10'),(9,'Tornillo Phillips2 80mm','TOR_PHI_280',86,2.50,4.50,2,'X4',5,'2019-03-02 07:06:15'),(10,'Tornillo Phillips2 90mm','TOR_PHI_290',101,2.50,4.50,2,'X4',5,'2019-03-02 07:06:21'),(11,'Tornillo Phillips3 80mm','TOR_PHI_380',80,3.00,5.20,2,'A1',5,'2020-06-05 17:04:14'),(14,'Tornillo Phillips1 80mm','TOR_PHI_180_2',50,2.90,5.30,2,'A1',5,'2020-06-11 14:20:26'),(21,'Tornillo_5','TOR_HEX_005',102,1.00,1.30,2,'AA2',4,'2021-03-31 12:30:06');
+INSERT INTO `products` VALUES (1,'LiteBeam AC Gen 2','01-01',6,1,'chacra',2,'2022-05-18 18:28:52'),(2,'Funte LiteBeam AC Gen 2','02-01',30,3,'chacra',3,'2022-05-18 18:29:56'),(3,'Francesa 12&#039;','03-01',1,2,'chacra',1,'2022-05-18 18:30:39'),(5,'LiteBeam AC Gen 2','01-011',10,1,'chacra',1,'2022-05-18 18:44:43');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,16 +139,12 @@ CREATE TABLE `sales` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` int(10) unsigned NOT NULL,
   `qty` int(11) NOT NULL,
-  `buy_price` decimal(25,2) DEFAULT 0.00,
-  `sale_price` decimal(25,2) DEFAULT 0.00,
-  `total_sale` decimal(25,2) DEFAULT 0.00,
-  `profit` decimal(25,2) DEFAULT 0.00,
   `destination` varchar(255) DEFAULT NULL,
-  `date` datetime NOT NULL,
+  `date` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `SK` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +153,7 @@ CREATE TABLE `sales` (
 
 LOCK TABLES `sales` WRITE;
 /*!40000 ALTER TABLE `sales` DISABLE KEYS */;
-INSERT INTO `sales` VALUES (1,7,6,2.50,4.50,27.00,12.00,'Pedro','2020-06-10 00:00:00'),(30,3,4,2.00,3.00,11.00,3.00,'Pedro','2020-06-11 02:26:05'),(32,3,7,2.00,3.00,21.00,7.00,'Juan','2020-06-04 00:00:00'),(33,3,5,2.00,3.00,15.00,5.00,'Almacen La Felicidad','2020-06-08 00:00:00'),(34,2,2,2.00,3.00,5.00,1.00,'Juan P.','2020-06-09 00:00:00'),(35,2,2,2.00,3.00,6.00,2.00,'Jose Martinez','2020-06-03 00:00:00'),(37,2,3,2.00,3.00,9.00,3.00,'Pedro Perez','2020-06-01 00:00:00'),(38,1,10,15.00,25.00,250.00,100.00,'Almacen La Felicidad','2020-06-11 00:00:00'),(39,3,1,2.00,3.00,3.00,1.00,'Almacen La Felicidad','2020-06-08 00:00:00'),(40,7,2,2.50,4.50,9.00,4.00,'Jesus','2020-05-27 00:00:00'),(41,6,10,2.50,4.50,45.00,20.00,'Pedro Perez','2020-05-28 00:00:00'),(45,9,14,2.50,4.20,58.80,23.80,'Pedro Perez','2020-06-08 00:00:00'),(46,5,10,2.50,5.30,53.00,28.00,'Juan Hernandez','2020-06-11 00:00:00'),(47,2,5,2.00,3.40,17.00,7.00,'Pedro','2021-04-01 00:00:00'),(48,7,10,2.50,4.50,45.00,20.00,'Distribuidora XXY','2021-04-03 00:00:00'),(49,2,2,2.00,3.40,6.80,2.80,'Distribuidora XXY','2021-04-01 00:00:00'),(50,5,10,2.50,5.10,51.00,26.00,'Pedro Perez','2021-03-30 00:00:00'),(51,8,10,2.50,4.50,45.00,20.00,'Cliente XYZ','2021-04-05 00:00:00');
+INSERT INTO `sales` VALUES (1,1,10,'EMA','2022-05-18'),(2,1,10,'EMA','2022-05-19'),(3,1,4,'EMA','2022-05-18');
 /*!40000 ALTER TABLE `sales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,7 +213,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin User','admin','c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec',1,'lnizqp31.jpg',1,'2021-08-28 15:47:11'),(3,'Normal User','user','b14361404c078ffd549c03db443c3fede2f3e534d73f78f77301ed97d4a436a9fd9db05ee8b325c0ad36438b43fec8510c204fc1c1edb21d0941c00e9e2c1ce2',3,'no_image.jpg',1,'2021-07-27 17:04:51'),(17,'Special User','special','98d5f28f0c604d7e34ea730e8dd61a644cf839bd1a56539bbaba0bba78c5529e3eb7002c3985ac7ad5ada28651fa88532b45717729c7cd9958e0e17415e1fcea',2,'no_image.jpg',1,'2021-07-27 17:04:58');
+INSERT INTO `users` VALUES (1,'Admin User','admin','c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec',1,'lnizqp31.jpg',1,'2022-05-21 15:24:05'),(3,'Normal User','user','b14361404c078ffd549c03db443c3fede2f3e534d73f78f77301ed97d4a436a9fd9db05ee8b325c0ad36438b43fec8510c204fc1c1edb21d0941c00e9e2c1ce2',3,'no_image.jpg',1,'2021-07-27 17:04:51'),(17,'Special User','special','98d5f28f0c604d7e34ea730e8dd61a644cf839bd1a56539bbaba0bba78c5529e3eb7002c3985ac7ad5ada28651fa88532b45717729c7cd9958e0e17415e1fcea',2,'no_image.jpg',1,'2021-07-27 17:04:58');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -240,4 +226,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-28 16:59:18
+-- Dump completed on 2022-05-21 21:36:48

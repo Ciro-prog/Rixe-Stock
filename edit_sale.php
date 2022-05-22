@@ -253,24 +253,24 @@
           </div>
 
           <div class="form-group">
-            <div class="row">
+           <!--  <div class="row">
               <div class="col-md-3">
                 <label for="" class="control-label">Precio compra</label> 
                 <span class="form-control rounded" id="buy_price">
                   <?php echo remove_junk($sale['buy_price']); ?>
                 </span>
-              </div>
-              <div class="col-md-3"><!-- column separator --></div>
+              </div> -->
+              <!-- <div class="col-md-3"> column separator</div>
               <div class="col-md-3">
                 <label for="" class="control-label">Precio venta</label> 
                 <input type="text" class="form-control rounded" id="sale_price" name="sale_price" value="<?php echo remove_junk($sale['sale_price']); ?>">
-              </div>
-              <div class="col-md-3">
+              </div> -->
+           <!--    <div class="col-md-3">
                 <label for="" class="control-label">Total Venta</label>
                 <input type="text" class="form-control rounded" id="total_sale" name="total_sale" value="<?php echo remove_junk($sale['total_sale']); ?>">
               </div>
             </div>
-          </div>
+          </div> -->
           
           <div class="form-group">
             <div class="row" style="margin-top: 3em;">
